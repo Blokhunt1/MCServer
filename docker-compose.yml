@@ -1,56 +1,16 @@
-version: '3.8'
 services:
-  minecraft:
-    image: itzg/minecraft-server:latest
+  mc:
+    image: itzg/minecraft-server
+    tty: true
+    stdin_open: true
     environment:
-      # Use PaperMC
+      EULA: "true"
       TYPE: PAPER
-      VERSION: "1.21.1"
-      EULA: "TRUE"
-      
-      # Memory settings
-      MEMORY: "4G"
-      
-      # Server settings
-      DIFFICULTY: easy
-      MAX_PLAYERS: 20
-      VIEW_DISTANCE: 10
-      SIMULATION_DISTANCE: 10
-      
-      # Performance optimizations
-      USE_AIKAR_FLAGS: "TRUE"
-      
-      # Fix permissions automatically
-      UID: 1000
-      GID: 1000
-      
-      # Automatic restarts and logging
-      ENABLE_ROLLING_LOGS: "TRUE"
-      
+      MEMORY: 2G
     ports:
       - "25565:25565"
     volumes:
-      - minecraft-data:/data
-      # Only mount plugins if you need to add them manually
-      # - ./plugins:/data/plugins
+      - mc-data:/data
     restart: unless-stopped
-    stdin_open: true
-    tty: true
-    mem_limit: 5G
-    memswap_limit: 5G
-    
-    healthcheck:
-      test: ["CMD-SHELL", "mc-health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 300s
-      
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
-        max-file: "3"
-
 volumes:
-  minecraft-data:
+  mc-data: {}
