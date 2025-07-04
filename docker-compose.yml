@@ -33,13 +33,14 @@ services:
         
         echo 'Setup complete!'
       "
+    mem_limit: 3.5G
 
   minecraft:
     image: marctv/minecraft-papermc-server:latest
     depends_on:
       - setup
     environment:
-      MEMORYSIZE: "2G"
+      MEMORYSIZE: "3G"
       PAPERMC_FLAGS: ""
     ports:
       - "25565:25565"
@@ -48,6 +49,7 @@ services:
     restart: unless-stopped
     stdin_open: true
     tty: true
+    mem_limit: 3.5G
 
 volumes:
   minecraft-data:
