@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  setup:
+    image: busybox
+    volumes:
+      - minecraft-data:/data
+      - ./setup:/setup
+    command: |
+      sh -c "
+        echo 'Setting up Minecraft PaperMC server...'
+        
+        # Create directories
+        mkdir -p /data/plugins
+        mkdir -p /data/plugins/Multiverse-Core
+        
+        # Copy plugins (only if not already present)
+        if [ ! -f /data/plugins/Multiverse-Core.jar ]; then
+          echo 'Copying plugins...'
+          cp -r /setup/plugins/* /data/plugins/
+        fi
+        
+        # Copy configs (only if not already present)
+        if [ ! -f /data/plugins/Multiverse-Core/config.yml ]; then
+          echo 'Copying configurations...'
+          cp -r /setup/config/* /data/plugins/
+        fi
+        
+        # Create eula.txt
+        echo 'eula=true' > /data/eula.txt
+        
+        # Set permissions
+        chmod -R 755 /data
+        
+        echo 'Setup complete!'
+      "
+
+  minecraft:
+    image: marctv/minecraft-papermc-server:latest
+    depends_on:
+      - setup
+    environment:
+      MEMORYSIZE: "2G"
+      PAPERMC_FLAGS: ""
+    ports:
+      - "25565:25565"
+    volumes:
+      - minecraft-data:/data
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+volumes:
+  minecraft-data:

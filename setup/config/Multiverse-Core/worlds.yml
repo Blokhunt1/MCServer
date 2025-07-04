@@ -1,0 +1,73 @@
+worlds:
+  creative:
+    ==: MVWorld
+    alias: creative
+    color: YELLOW
+    style: NORMAL
+    pvp: false
+    scale: 1.0
+    respawnWorld: ''
+    allowWeather: true
+    difficulty: PEACEFUL
+    seed: '7644964991330705060' 
+    spawning:
+      ==: SpawnSettings
+      animals: true
+      monsters: false
+      pets: true
+      npcs: true
+    gameMode: CREATIVE
+    keepSpawnInMemory: true
+    spawnLocation:
+      ==: SpawnLocation
+      x: 0.0
+      y: 64.0
+      z: 0.0
+      pitch: 0.0
+      yaw: 0.0
+    autoLoad: true
+    bedRespawn: true
+    hunger: false
+    autoHeal: true
+    adjustSpawn: true
+    portalForm: ALL
+    gameRule:
+      doMobSpawning: false
+      keepInventory: true
+      doDaylightCycle: false
+      
+  survival:
+    ==: MVWorld
+    alias: survival
+    color: GREEN
+    style: NORMAL
+    pvp: true
+    scale: 1.0
+    respawnWorld: ''
+    allowWeather: true
+    difficulty: NORMAL
+    spawning:
+      ==: SpawnSettings
+      animals: true
+      monsters: true
+      pets: true
+      npcs: true
+    gameMode: SURVIVAL
+    keepSpawnInMemory: true
+    seed: "-1718501946501227358"
+    spawnLocation:
+      ==: SpawnLocation
+      x: 0.0
+      y: 64.0
+      z: 0.0
+      pitch: 0.0
+      yaw: 0.0
+    autoLoad: true
+    bedRespawn: true
+    hunger: true
+    autoHeal: false
+    adjustSpawn: true
+    portalForm: ALL
+    gameRule:
+      doMobSpawning: true
+      keepInventory: false
