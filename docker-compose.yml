@@ -1,55 +1,58 @@
 version: '3.8'
 services:
-  setup:
-    image: busybox
-    volumes:
-      - minecraft-data:/data
-      - ./setup:/setup
-    command: |
-      sh -c "
-        echo 'Setting up Minecraft PaperMC server...'
-        
-        # Create directories
-        mkdir -p /data/plugins
-        #mkdir -p /data/plugins/Multiverse-Core
-        
-        # Copy plugins (only if not already present)
-        if [ ! -f /data/plugins/Multiverse-Core.jar ]; then
-          echo 'Copying plugins...'
-          cp -r /setup/plugins/* /data/plugins/
-        fi
-        
-        # Copy configs (only if not already present)
-        #if [ ! -f /data/plugins/Multiverse-Core/config.yml ]; then
-        #  echo 'Copying configurations...'
-        #  cp -r /setup/config/* /data/plugins/
-        #fi
-        
-        # Create eula.txt
-        echo 'eula=true' > /data/eula.txt
-        
-        # Set permissions
-        chmod -R 755 /data
-        
-        echo 'Setup complete!'
-      "
-    mem_limit: 4.5G
-
   minecraft:
-    image: marctv/minecraft-papermc-server:1.21.5
-    depends_on:
-      - setup
+    image: itzg/minecraft-server:latest
     environment:
-      MEMORYSIZE: "6G"
-      PAPERMC_FLAGS: ""
+      # Use PaperMC
+      TYPE: PAPER
+      VERSION: "1.21.1"  # Use stable version instead of 1.21.5
+      EULA: "TRUE"
+      
+      # Memory settings
+      MEMORY: "4G"
+      
+      # Server settings
+      DIFFICULTY: easy
+      MAX_PLAYERS: 20
+      VIEW_DISTANCE: 10
+      SIMULATION_DISTANCE: 10
+      
+      # Performance optimizations
+      USE_AIKAR_FLAGS: "TRUE"
+      
+      # Automatic plugin installation (optional)
+      # PLUGINS: |
+      #   https://github.com/Multiverse/Multiverse-Core/releases/download/4.3.12/multiverse-core-4.3.12.jar
+      
+      # Automatic restarts
+      ENABLE_ROLLING_LOGS: "TRUE"
+      
     ports:
       - "25565:25565"
     volumes:
       - minecraft-data:/data
+      # Mount plugins directory for easier management
+      - ./plugins:/data/plugins
+      # Mount logs for debugging
+      - ./logs:/data/logs
     restart: unless-stopped
     stdin_open: true
     tty: true
-    mem_limit: 6.5G
+    mem_limit: 5G
+    memswap_limit: 5G
+    
+    healthcheck:
+      test: ["CMD-SHELL", "mc-health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 300s
+      
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   minecraft-data:
