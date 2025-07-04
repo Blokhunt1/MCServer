@@ -5,7 +5,7 @@ services:
     environment:
       # Use PaperMC
       TYPE: PAPER
-      VERSION: "1.21.1"  # Use stable version instead of 1.21.5
+      VERSION: "1.21.1"
       EULA: "TRUE"
       
       # Memory settings
@@ -20,21 +20,19 @@ services:
       # Performance optimizations
       USE_AIKAR_FLAGS: "TRUE"
       
-      # Automatic plugin installation (optional)
-      # PLUGINS: |
-      #   https://github.com/Multiverse/Multiverse-Core/releases/download/4.3.12/multiverse-core-4.3.12.jar
+      # Fix permissions automatically
+      UID: 1000
+      GID: 1000
       
-      # Automatic restarts
+      # Automatic restarts and logging
       ENABLE_ROLLING_LOGS: "TRUE"
       
     ports:
       - "25565:25565"
     volumes:
       - minecraft-data:/data
-      # Mount plugins directory for easier management
-      - ./plugins:/data/plugins
-      # Mount logs for debugging
-      - ./logs:/data/logs
+      # Only mount plugins if you need to add them manually
+      # - ./plugins:/data/plugins
     restart: unless-stopped
     stdin_open: true
     tty: true
@@ -51,7 +49,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "10m"
+        max-size: "50m"
         max-file: "3"
 
 volumes:
