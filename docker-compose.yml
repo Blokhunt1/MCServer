@@ -6,7 +6,9 @@ services:
     environment:
       EULA: "true"
       TYPE: PAPER
-      MEMORY: 2G
+      PLUGINS_FILE: /plugins.txt
+      MEMORY: 4G
+      VERSION: "1.21.5"
     ports:
       - "25565:25565"
     volumes:
